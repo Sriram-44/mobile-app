@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 public class LoginActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin;
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
                     finish(); // Finish the login activity so user can't go back to it
                 } else {
                     // Login failed, display error message
-                    Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_LONG).show();
                 }
             }
         });
