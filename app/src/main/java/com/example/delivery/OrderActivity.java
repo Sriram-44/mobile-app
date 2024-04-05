@@ -7,12 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class OrderActivity extends AppCompatActivity {
 
     EditText distanceEditText;
     TextView costTextView;
-    Button calculateButton;
+    Button calculateButton, buttonConfirmOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +23,21 @@ public class OrderActivity extends AppCompatActivity {
         distanceEditText = findViewById(R.id.distanceEditText);
         costTextView = findViewById(R.id.costTextView);
         calculateButton = findViewById(R.id.calculateButton);
+        buttonConfirmOrder = findViewById(R.id.buttonConfirmOrder); // Initialize buttonConfirmOrder
 
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculateCost();
+            }
+        });
+
+        // Set OnClickListener for buttonConfirmOrder
+        buttonConfirmOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Display a toast message when the button is clicked
+                Toast.makeText(OrderActivity.this, "Order confirmed", Toast.LENGTH_SHORT).show();
             }
         });
     }

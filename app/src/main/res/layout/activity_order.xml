@@ -32,7 +32,7 @@
         android:text=""
         android:textSize="18sp" />
 
-    <!-- Add the button for confirming the order -->
+    <!-- Button for confirming the order -->
     <Button
         android:id="@+id/buttonConfirmOrder"
         android:layout_width="wrap_content"
