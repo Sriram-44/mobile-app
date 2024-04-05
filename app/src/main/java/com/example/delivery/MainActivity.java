@@ -16,16 +16,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize buttons
         buttonProfile = findViewById(R.id.buttonProfile);
         buttonOrders = findViewById(R.id.buttonOrders);
         buttonLogout = findViewById(R.id.buttonLogout);
 
-        // Set click listeners for buttons
         buttonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle profile button click
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
@@ -33,9 +30,19 @@ public class MainActivity extends AppCompatActivity {
 
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Handle logout button click
-                // You can add your logout logic here
+            public void onClick(View v) {Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        buttonOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {Intent intent = new Intent(MainActivity.this, OrderActivity.class);
+                startActivity(intent);
+                finish();
+
             }
         });
     }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".OrderActivity">
 
     <EditText
         android:id="@+id/distanceEditText"
@@ -31,5 +31,15 @@
         android:layout_marginTop="16dp"
         android:text=""
         android:textSize="18sp" />
+
+    <!-- Add the button for confirming the order -->
+    <Button
+        android:id="@+id/buttonConfirmOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/costTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Confirm Order" />
 
 </RelativeLayout>

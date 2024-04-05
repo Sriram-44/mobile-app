@@ -2,24 +2,22 @@ package com.example.delivery;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity {
 
     EditText distanceEditText;
     TextView costTextView;
     Button calculateButton;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_order); // Corrected layout
 
         distanceEditText = findViewById(R.id.distanceEditText);
         costTextView = findViewById(R.id.costTextView);
