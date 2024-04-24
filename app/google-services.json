@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "295812294454",
+    "project_id": "delivery-8030",
+    "storage_bucket": "delivery-8030.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295812294454:android:5584ef1346671ebb1d7597",
+        "android_client_info": {
+          "package_name": "com.example.delivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByTVDiaa4cWIC9VBRARPWuJkzvvdgfYYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,19 +11,20 @@ import android.widget.Toast;
 
 public class OrderActivity extends AppCompatActivity {
 
-    EditText distanceEditText;
+    EditText distanceEditText, weightEditText;
     TextView costTextView;
     Button calculateButton, buttonConfirmOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order); // Corrected layout
+        setContentView(R.layout.activity_order);
 
         distanceEditText = findViewById(R.id.distanceEditText);
+        weightEditText = findViewById(R.id.weightEditText);
         costTextView = findViewById(R.id.costTextView);
         calculateButton = findViewById(R.id.calculateButton);
-        buttonConfirmOrder = findViewById(R.id.buttonConfirmOrder); // Initialize buttonConfirmOrder
+        buttonConfirmOrder = findViewById(R.id.buttonConfirmOrder);
 
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,11 +33,9 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        // Set OnClickListener for buttonConfirmOrder
         buttonConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Display a toast message when the button is clicked
                 Toast.makeText(OrderActivity.this, "Order confirmed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -44,27 +43,42 @@ public class OrderActivity extends AppCompatActivity {
 
     private void calculateCost() {
         String distanceStr = distanceEditText.getText().toString();
-        if (!distanceStr.isEmpty()) {
+        String weightStr = weightEditText.getText().toString();
+        if (!distanceStr.isEmpty() && !weightStr.isEmpty()) {
             double distance = Double.parseDouble(distanceStr);
-            double cost = calculateDeliveryCost(distance);
+            double weight = Double.parseDouble(weightStr);
+            double cost = calculateDeliveryCost(distance, weight);
             costTextView.setText("The cost of delivery is: $" + cost);
         } else {
-            costTextView.setText("Please enter a distance.");
+            costTextView.setText("Please enter both distance and weight.");
         }
     }
 
-    private double calculateDeliveryCost(double distance) {
-        double baseCost = 10; // Cost for the first 10 km
-        double additionalCostPerKm = 1; // Additional cost per km after the first 10 km
+    private double calculateDeliveryCost(double distance, double weight) {
+        double baseCost = 10;
+        double additionalCostPerKm = 1;
 
         if (distance <= 10) {
-            return baseCost;
+            return applyWeightModifier(baseCost, weight);
         } else if (distance <= 20) {
-            return baseCost + (distance - 10) * additionalCostPerKm;
+            double costForFirst10Km = applyWeightModifier(baseCost, weight);
+            double additionalDistanceCost = (distance - 10) * additionalCostPerKm;
+            return costForFirst10Km + applyWeightModifier(additionalDistanceCost, weight);
         } else {
-            double costForFirst20Km = baseCost + (10 * additionalCostPerKm);
+            double costForFirst20Km = applyWeightModifier(baseCost + (10 * additionalCostPerKm), weight);
             double additionalDistance = distance - 20;
-            return costForFirst20Km + (additionalDistance * (additionalCostPerKm + 1));
+            double additionalDistanceCost = additionalDistance * (additionalCostPerKm + 1);
+            return costForFirst20Km + applyWeightModifier(additionalDistanceCost, weight);
+        }
+    }
+
+    private double applyWeightModifier(double cost, double weight) {
+        if (weight < 2) {
+            return cost;
+        } else if (weight <= 10) {
+            return cost * 1.5;
+        } else {
+            return cost * 2;
         }
     }
 }

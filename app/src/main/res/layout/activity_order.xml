@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrderActivity">
+    tools:context=".OrderActivity"
+    android:background="@color/lightgray">
 
     <EditText
         android:id="@+id/distanceEditText"
@@ -13,11 +14,20 @@
         android:hint="Enter distance in km"
         android:inputType="numberDecimal" />
 
+    <EditText
+        android:id="@+id/weightEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/distanceEditText"
+        android:layout_margin="16dp"
+        android:hint="Enter the weight in kg"
+        android:inputType="numberDecimal" />
+
     <Button
         android:id="@+id/calculateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/distanceEditText"
+        android:layout_below="@id/weightEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Calculate" />

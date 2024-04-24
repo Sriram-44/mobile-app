@@ -1,39 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/black">
 
     <TextView
         android:id="@+id/textViewWelcomeMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to the Dashboard!"
+        android:text="Main Page"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        tools:ignore="HardcodedText" />
 
-    <Button
-        android:id="@+id/buttonProfile"
+    <!-- Container view for fragment -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="422dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Profile"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/buttonOrders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Orders"
-        android:layout_marginBottom="16dp"/>
+        <Button
+            android:id="@+id/buttonProfile"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:layout_marginEnd="4dp"
+            tools:ignore="HardcodedText"/>
 
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"/>
+        <Button
+            android:id="@+id/buttonOrders"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Orders"
+            android:layout_marginEnd="4dp"
+            tools:ignore="HardcodedText"/>
+
+        <Button
+            android:id="@+id/buttonContact"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Info"
+            android:layout_marginEnd="0dp"
+            tools:ignore="HardcodedText"/>
+
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            tools:ignore="HardcodedText"/>
+
+    </LinearLayout>
 
 </LinearLayout>
