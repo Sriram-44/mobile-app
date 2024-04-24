@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/distanceEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Enter distance in km"
-        android:inputType="numberDecimal" />
-
-    <Button
-        android:id="@+id/calculateButton"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/distanceEditText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="Calculate" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/costTextView"
+        android:id="@+id/user_email_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/calculateButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text=""
+        android:layout_marginBottom="8dp"
+
+        android:text="User Email:"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/user_email_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_email_label"
+        android:textSize="16sp"/>
 
 </RelativeLayout>
