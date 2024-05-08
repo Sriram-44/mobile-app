@@ -13,11 +13,42 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
+        android:id="@+id/user_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="User Name:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/user_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_name_label"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/user_city_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_name_text_view"
+        android:layout_marginTop="16dp"
+        android:text="User City:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/user_city_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_city_label"
+        android:textSize="16sp"/>
+
+    <TextView
         android:id="@+id/user_email_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-
+        android:layout_below="@id/user_city_text_view"
+        android:layout_marginTop="16dp"
         android:text="User Email:"
         android:textSize="18sp" />
 

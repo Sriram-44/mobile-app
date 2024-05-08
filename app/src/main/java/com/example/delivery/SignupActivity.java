@@ -2,8 +2,11 @@ package com.example.delivery;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,9 +18,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
-    private EditText editTextEmailOrPhone, editTextPassword, editTextConfirmPassword;
+    private EditText editTextEmail, editTextPhoneNumber, editTextPassword, editTextConfirmPassword, editTextUserName, editTextCity;
     private Button buttonSignUp;
+    private RadioGroup radioGroupOptions;
     private FirebaseAuth mAuth;
+    private boolean isEmailSelected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +33,52 @@ public class SignupActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // Initialize views
-        editTextEmailOrPhone = findViewById(R.id.editTextEmailOrPhone);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
+        editTextUserName = findViewById(R.id.editTextUserName);
+        editTextCity = findViewById(R.id.editTextCity);
         buttonSignUp = findViewById(R.id.buttonSignUp);
+        radioGroupOptions = findViewById(R.id.radioGroupOptions);
+
+        // Set default visibility for email and phone number fields
+        editTextEmail.setVisibility(View.VISIBLE);
+        editTextPhoneNumber.setVisibility(View.GONE);
 
         // Set OnClickListener for SignUp button
         buttonSignUp.setOnClickListener(view -> signUp());
+
+        // Set OnCheckedChangeListener for radio group
+        radioGroupOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radioButtonEmail) {
+                    isEmailSelected = true;
+                    editTextEmail.setVisibility(View.VISIBLE);
+                    editTextPhoneNumber.setVisibility(View.GONE);
+                } else if (checkedId == R.id.radioButtonPhoneNumber) {
+                    isEmailSelected = false;
+                    editTextEmail.setVisibility(View.GONE);
+                    editTextPhoneNumber.setVisibility(View.VISIBLE);
+                }
+            }
+    });
     }
 
     private void signUp() {
-        String emailOrPhone = editTextEmailOrPhone.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
+        String phoneNumber = editTextPhoneNumber.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
+        String userName = editTextUserName.getText().toString().trim();
+        String city = editTextCity.getText().toString().trim();
 
-        if (TextUtils.isEmpty(emailOrPhone)) {
-            Toast.makeText(this, "Enter email or phone number", Toast.LENGTH_SHORT).show();
+        String signUpCredential = isEmailSelected ? email : phoneNumber;
+
+        // Perform validation
+        if (TextUtils.isEmpty(signUpCredential)) {
+            Toast.makeText(this, isEmailSelected ? "Enter email" : "Enter phone number", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -57,16 +92,17 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(emailOrPhone, password)
+        // Perform sign up with email or phone number
+        mAuth.createUserWithEmailAndPassword(signUpCredential, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign up success, update UI with the signed-in user's information
                             Toast.makeText(SignupActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
                             finish(); // Close SignUpActivity after successful sign up
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign up fails, display a message to the user.
                             Toast.makeText(SignupActivity.this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
