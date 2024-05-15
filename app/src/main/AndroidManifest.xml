@@ -29,10 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity">
 
-            <!-- Add any additional intent filters or configurations here if needed -->
-        </activity>
 
         <activity
             android:name=".OrderActivity"
@@ -51,5 +48,6 @@
             android:exported="false"
             tools:ignore="MissingClass" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.delivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -13,8 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,15 +25,16 @@ public class SignupActivity extends AppCompatActivity {
     private EditText editTextUserName, editTextEmailOrPhone, editTextCity, editTextPassword, editTextConfirmPassword;
     private Button buttonSignUp;
     private FirebaseAuth mAuth;
-
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Initialize Firebase Auth
+        // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Initialize views
         editTextUserName = findViewById(R.id.editTextUserName);
@@ -54,23 +56,9 @@ public class SignupActivity extends AppCompatActivity {
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
         // Perform validation
-        if (TextUtils.isEmpty(userName)) {
-            Toast.makeText(this, "Enter username", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(emailOrPhone)) {
-            Toast.makeText(this, "Enter email or phone number", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(city)) {
-            Toast.makeText(this, "Enter city", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(emailOrPhone) || TextUtils.isEmpty(city)
+                || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -79,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        // Perform sign up with email or phone number
+        // Perform sign up with email
         mAuth.createUserWithEmailAndPassword(emailOrPhone, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -91,8 +79,8 @@ public class SignupActivity extends AppCompatActivity {
                             // Get the user's unique ID (UID)
                             String userId = mAuth.getCurrentUser().getUid();
 
-                            // Reference to the location in the Realtime Database where you want to store the user's information
-                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+                            // Reference to the location in the Firestore where you want to store the user's information
+                            DocumentReference userRef = db.collection("users").document(userId);
 
                             // Create a User object or simply a Map with the user's information
                             Map<String, Object> user = new HashMap<>();
@@ -100,10 +88,18 @@ public class SignupActivity extends AppCompatActivity {
                             user.put("emailOrPhone", emailOrPhone);
                             user.put("city", city);
 
-                            // Write the user's information to the Realtime Database
-                            userRef.setValue(user);
-
-                            // Optionally, navigate to another activity or perform additional actions
+                            // Write the user's information to Firestore
+                            userRef.set(user)
+                                    .addOnSuccessListener(aVoid -> {
+                                        // User information saved successfully
+                                        // Optionally, navigate to another activity or perform additional actions
+                                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Error occurred while saving user information
+                                        Toast.makeText(SignupActivity.this, "Failed to save user information: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
                         } else {
                             // If sign up fails, display a message to the user.
                             Toast.makeText(SignupActivity.this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
