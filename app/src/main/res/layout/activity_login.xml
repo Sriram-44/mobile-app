@@ -55,6 +55,18 @@
         android:text="login"
         tools:ignore="HardcodedText" />
 
+    <!-- Forgot Password TextView -->
+    <TextView
+        android:id="@+id/textViewForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="Forgot Password?"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+        tools:ignore="HardcodedText" />
+
     <TextView
         android:id="@+id/textViewSignup"
         android:layout_width="wrap_content"

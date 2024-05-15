@@ -34,6 +34,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.material:material:1.13.0-alpha01")
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-database:20.0.0")
+    implementation("com.google.firebase:firebase-auth:21.0.1")
     implementation("com.airbnb.android:lottie:4.2.0")
     implementation(libs.appcompat)
     implementation(libs.material)

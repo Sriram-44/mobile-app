@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OrderActivity"
-    android:background="@color/lightgray">
+    android:background="@color/black">
 
     <EditText
         android:id="@+id/distanceEditText"
