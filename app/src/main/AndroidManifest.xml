@@ -58,6 +58,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+
+
+        <activity
+            android:name=".OrderActivity"
+            android:exported="false"
+            tools:ignore="MissingClass" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            tools:ignore="MissingClass" />
+>>>>>>> 5af369c14c88ebd86c684abfa4fcf942762066a6
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -75,5 +88,6 @@
             android:exported="false"
             tools:ignore="MissingClass" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
