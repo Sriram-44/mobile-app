@@ -1,0 +1,131 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/horizontalRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <!-- First row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- First GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo1"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order1" />
+
+            <!-- Second GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo2"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order2" />
+
+        </LinearLayout>
+
+        <!-- Second row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Third GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo3"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order3" />
+
+            <!-- Fourth GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo4"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order4" />
+
+        </LinearLayout>
+
+        <!-- Third row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Fifth GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo5"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order5" />
+
+            <!-- Sixth GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo6"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order6" />
+
+        </LinearLayout>
+
+        <!-- Fourth row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Seventh GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo7"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order7" />
+
+            <!-- Eighth GIF -->
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/photo8"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/order8" />
+
+        </LinearLayout>
+
+        <!-- Repeat the pattern for additional rows as needed -->
+
+    </LinearLayout>
+</ScrollView>

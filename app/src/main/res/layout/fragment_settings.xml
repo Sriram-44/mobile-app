@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".SettingsFragment">
+
+    <Button
+        android:id="@+id/buttonAccountSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Account Settings"
+        android:onClick="openAccountSettings"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/buttonAppSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="App Settings"
+        android:onClick="openAppSettings"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/buttonAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:onClick="toggleAboutVisibility"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:id="@+id/layoutAboutDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textAbout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/textAboutContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your app details go here..."
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

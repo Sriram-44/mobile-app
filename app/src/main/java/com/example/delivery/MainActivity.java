@@ -1,18 +1,16 @@
 package com.example.delivery;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FontBaseActivity {
 
-    private Button buttonProfile, buttonOrders, buttonLogout;
+    private Button buttonProfile, buttonOrders, buttonContact, buttonSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,40 +20,40 @@ public class MainActivity extends AppCompatActivity {
         // Find buttons
         buttonProfile = findViewById(R.id.buttonProfile);
         buttonOrders = findViewById(R.id.buttonOrders);
-        buttonLogout = findViewById(R.id.buttonLogout);
-
-        overridePendingTransition(R.anim.slidein,R.anim.slideout);
-
+        buttonContact = findViewById(R.id.buttonContact); // Corrected
+        buttonSettings = findViewById(R.id.buttonSettings);
 
         // Set click listeners for buttons
         buttonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to ProfileActivity
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-            }
-        });
-
-        buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to LoginActivity
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
+                loadFragment(new AccountFragment());
             }
         });
 
         buttonOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to OrderActivity
-                startActivity(new Intent(MainActivity.this, OrderActivity.class));
-                finish();
+                loadFragment(new OrderFragment());
             }
         });
 
-        // Load MainFragment
-        loadFragment(new MainFragment());
+        buttonContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new ContactFragment()); // Corrected
+            }
+        });
+
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new SettingsFragment());
+            }
+        });
+
+        // Load default fragment (e.g., OrdersFragment)
+        loadFragment(new OrderFragment());
     }
 
     // Method to load fragment into container
@@ -64,5 +62,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_main;
     }
 }

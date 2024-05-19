@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#99000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="linkColor">#007bff</color>
     <color name="red">#FFFF0000</color>
     <color name="green">#FF00FF00</color>
     <color name="blue">#FF0000FF</color>
@@ -26,4 +27,20 @@
     <color name="lightyellow">#FFFFFFE0</color>
     <color name="lightcyan">#FFE0FFFF</color>
     <color name="lightmagenta">#FFF5F5DC</color>
+    <color name="background_color">#121212</color>
+    <color name="button_color">#6200EE</color>
+        <!-- Light Theme colors -->
+        <color name="colorPrimary">#6200EE</color>
+        <color name="colorPrimaryDark">#3700B3</color>
+        <color name="colorAccent">#03DAC5</color>
+        <color name="backgroundLight">#FFFFFF</color>
+        <color name="textColorLight">#000000</color>
+
+        <!-- Dark Theme colors -->
+        <color name="backgroundDark">#121212</color>
+        <color name="textColorDark">#FFFFFF</color>
+        <color name="colorPrimaryDarkTheme">#BB86FC</color>
+        <color name="colorPrimaryDarker">#3700B3</color>
+        <color name="colorAccentDark">#03DAC5</color>
+
 </resources>

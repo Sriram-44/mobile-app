@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,12 +18,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends FontBaseActivity {
 
     private EditText editTextUserName, editTextEmailOrPhone, editTextCity, editTextPassword, editTextConfirmPassword;
     private Button buttonSignUp;
     private FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,5 +108,10 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_signup;
     }
 }

@@ -4,24 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends FontBaseActivity {
     private EditText editTextEmail, editTextPassword;
-    private TextView textViewSignUp;
     private FirebaseAuth mAuth;
 
     @Override
@@ -32,27 +27,42 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize views
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
-        textViewSignUp = findViewById(R.id.textViewSignup); // Corrected variable assignment
-        TextView appName = findViewById(R.id.Appname);
-        Animation slideInAnimation = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.slidein);
-        //appName.setVisibility(View.VISIBLE);
-        appName.startAnimation(slideInAnimation);
-        overridePendingTransition(R.anim.slidein,R.anim.slideout);
 
-        // Set OnClickListener for SignUp text view
+        TextView textViewSignUp = findViewById(R.id.textViewSignup);
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Start SignUpActivity when SignUp text view is clicked
-                Intent signUpIntent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(signUpIntent);
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
 
-        // Set OnClickListener for Login button
+        // Forgot Password functionality
+        TextView textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
+        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = editTextEmail.getText().toString().trim();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(LoginActivity.this, "Enter your email first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mAuth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(LoginActivity.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Failed to send password reset email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,14 +85,12 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Authenticate user with Firebase
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
@@ -92,5 +100,10 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_login;
     }
 }
