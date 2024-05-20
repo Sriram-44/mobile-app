@@ -5,148 +5,44 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
+import pl.droidsonroids.gif.GifImageView;
 
 public class OrderFragment extends Fragment {
-
-    private RecyclerView horizontalRecyclerView;
-    private HorizontalAdapter horizontalAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_order, container, false);
 
-        horizontalRecyclerView = rootView.findViewById(R.id.horizontalRecyclerView);
-        horizontalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        horizontalAdapter = new HorizontalAdapter(getHorizontalItems());
-        horizontalRecyclerView.setAdapter(horizontalAdapter);
+        GifImageView photo1 = rootView.findViewById(R.id.photo1);
+        GifImageView photo2 = rootView.findViewById(R.id.photo2);
+        GifImageView photo3 = rootView.findViewById(R.id.photo3);
+        GifImageView photo4 = rootView.findViewById(R.id.photo4);
+        GifImageView photo5 = rootView.findViewById(R.id.photo5);
+        GifImageView photo6 = rootView.findViewById(R.id.photo6);
+        GifImageView photo7 = rootView.findViewById(R.id.photo7);
+        GifImageView photo8 = rootView.findViewById(R.id.photo8);
+
+        photo1.setOnClickListener(v -> startGifActivity(Gif1Activity.class, R.drawable.order1));
+        photo2.setOnClickListener(v -> startGifActivity(Gif2Activity.class, R.drawable.order2));
+        photo3.setOnClickListener(v -> startGifActivity(Gif3Activity.class, R.drawable.order3));
+        photo4.setOnClickListener(v -> startGifActivity(Gif4Activity.class, R.drawable.order4));
+        photo5.setOnClickListener(v -> startGifActivity(Gif5Activity.class, R.drawable.order5));
+        photo6.setOnClickListener(v -> startGifActivity(Gif6Activity.class, R.drawable.order6));
+        photo7.setOnClickListener(v -> startGifActivity(Gif7Activity.class, R.drawable.order7));
+        photo8.setOnClickListener(v -> startGifActivity(Gif8Activity.class, R.drawable.order8));
 
         return rootView;
     }
 
-    private List<List<Integer>> getHorizontalItems() {
-        List<List<Integer>> horizontalItems = new ArrayList<>();
-
-        List<Integer> row1 = new ArrayList<>();
-        row1.add(R.drawable.order1);
-        row1.add(R.drawable.order2);
-        horizontalItems.add(row1);
-
-        List<Integer> row2 = new ArrayList<>();
-        row2.add(R.drawable.order3);
-        row2.add(R.drawable.order4);
-        horizontalItems.add(row2);
-
-        List<Integer> row3 = new ArrayList<>();
-        row3.add(R.drawable.order5);
-        row3.add(R.drawable.order6);
-        horizontalItems.add(row3);
-
-        List<Integer> row4 = new ArrayList<>();
-        row4.add(R.drawable.order7);
-        row4.add(R.drawable.order8);
-        horizontalItems.add(row4);
-
-        return horizontalItems;
-    }
-
-    private static class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.ViewHolder> {
-        private final List<List<Integer>> horizontalItems;
-
-        HorizontalAdapter(List<List<Integer>> horizontalItems) {
-            this.horizontalItems = horizontalItems;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_row_item, parent, false);
-            return new ViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            List<Integer> verticalItems = horizontalItems.get(position);
-            holder.verticalPagerAdapter.setData(verticalItems);
-        }
-
-        @Override
-        public int getItemCount() {
-            return horizontalItems.size();
-        }
-
-        static class ViewHolder extends RecyclerView.ViewHolder {
-            ViewPager verticalViewPager;
-            VerticalPagerAdapter verticalPagerAdapter;
-
-            ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                verticalViewPager = itemView.findViewById(R.id.verticalViewPager);
-                verticalPagerAdapter = new VerticalPagerAdapter();
-                verticalViewPager.setAdapter(verticalPagerAdapter);
-            }
-        }
-    }
-
-    private static class VerticalPagerAdapter extends PagerAdapter {
-        private List<Integer> verticalItems = new ArrayList<>();
-
-        void setData(List<Integer> verticalItems) {
-            this.verticalItems = verticalItems;
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return verticalItems.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.vertical_item, container, false);
-            ImageView imageView = itemView.findViewById(R.id.imageView);
-
-            // Use Picasso to load image into ImageView
-            Picasso.get()
-                    .load(verticalItems.get(position)) // Load image resource
-                    .into(imageView); // Into the ImageView
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent;
-                    int drawableId = verticalItems.get(position);
-                    // Handle image click as before
-                }
-            });
-
-            container.addView(itemView);
-            return itemView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
+    private void startGifActivity(Class<?> activityClass, int imageResourceId) {
+        Intent intent = new Intent(getContext(), activityClass);
+        intent.putExtra("imageResourceId", imageResourceId);
+        startActivity(intent);
     }
 }

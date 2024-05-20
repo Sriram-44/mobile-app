@@ -36,14 +36,24 @@ public class Gif1Activity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_gif1);
 
+        setupWindowInsets();
+        initializeFirebase();
+        setupActivity();
+    }
+
+    private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
+    private void initializeFirebase() {
         databaseReference = FirebaseDatabase.getInstance().getReference("cartItems");
+    }
 
+    private void setupActivity() {
         detailsLayout = findViewById(R.id.detailsLayout);
         productNameTextView = findViewById(R.id.productName);
         productPriceTextView = findViewById(R.id.productPrice);

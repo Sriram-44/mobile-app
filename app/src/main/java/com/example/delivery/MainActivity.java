@@ -1,5 +1,6 @@
 package com.example.delivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runFragmentTransaction(new PaymentFragment());
+                runFragmentTransaction(new SettingsFragment());
             }
         });
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
 
