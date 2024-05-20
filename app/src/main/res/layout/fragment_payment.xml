@@ -1,40 +1,46 @@
-<!-- payment_fragment.xml -->
+<!-- fragment_payment.xml -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <!-- Total Price -->
     <TextView
         android:id="@+id/textViewTotalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Total Price: $0.00"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
-    <!-- Delivery Distance -->
     <EditText
         android:id="@+id/editTextDeliveryDistance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Delivery Distance (in km)"
-        android:inputType="numberDecimal" />
+        android:hint="Delivery Distance"
+        android:inputType="numberDecimal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="18dp"
+        />
 
-    <!-- Payment Method -->
     <RadioGroup
         android:id="@+id/radioGroupPaymentMethod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
         <RadioButton
             android:id="@+id/radioButtonUPI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UPI"
-            android:textSize="20dp"
+            android:textSize="18dp"
             />
 
         <RadioButton
@@ -42,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Card"
-            android:textSize="20dp"
+            android:textSize="18dp"
             />
 
         <RadioButton
@@ -50,18 +56,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cash on Delivery"
-            android:textSize="20dp"
+            android:textSize="18dp"
             />
+
     </RadioGroup>
 
-    <!-- Payment Button -->
     <Button
         android:id="@+id/buttonProceedToPayment"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Proceed to Payment"
-        android:background="@drawable/button_background"
+        android:layout_gravity="center"
         android:layout_marginTop="16dp"
+        android:padding="10dp"
+        android:background="@drawable/button_background"
         />
 
 </LinearLayout>

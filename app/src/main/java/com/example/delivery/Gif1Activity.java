@@ -3,11 +3,11 @@ package com.example.delivery;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -75,7 +75,11 @@ public class Gif1Activity extends AppCompatActivity {
 
         addToCartButton.setOnClickListener(view -> {
             int selectedQuantity = Integer.parseInt(quantitySpinner.getSelectedItem().toString());
-            addToCart(productNameTextView.getText().toString(), productPriceTextView.getText().toString(), selectedQuantity);
+            String productName = productNameTextView.getText().toString();
+            String productPrice = productPriceTextView.getText().toString();
+            addToCart(productName, productPrice, selectedQuantity);
+            // Pass details to PaymentFragment
+            openPaymentFragment(productName, productPrice, selectedQuantity);
         });
 
         backButton.setOnClickListener(v -> onBackPressed());
@@ -93,6 +97,22 @@ public class Gif1Activity extends AppCompatActivity {
         databaseReference.child(id).setValue(cartItem)
                 .addOnSuccessListener(aVoid -> Toast.makeText(Gif1Activity.this, "Added to cart", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(Gif1Activity.this, "Failed to add to cart", Toast.LENGTH_SHORT).show());
+    }
+
+    private void openPaymentFragment(String productName, String productPrice, int quantity) {
+        // Create a new instance of PaymentFragment and pass details as arguments
+        PaymentFragment paymentFragment = new PaymentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("productName", productName);
+        bundle.putString("productPrice", productPrice);
+        bundle.putInt("quantity", quantity);
+        paymentFragment.setArguments(bundle);
+
+        // Navigate to PaymentFragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, paymentFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     public static class CartItem {

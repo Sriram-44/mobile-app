@@ -1,5 +1,6 @@
 package com.example.delivery;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 
 public class PaymentFragment extends Fragment {
 
@@ -29,12 +32,6 @@ public class PaymentFragment extends Fragment {
         radioGroupPaymentMethod = view.findViewById(R.id.radioGroupPaymentMethod);
         buttonProceedToPayment = view.findViewById(R.id.buttonProceedToPayment);
 
-        // Set total price (assuming it's passed as an argument)
-        if (getArguments() != null) {
-            double totalPrice = getArguments().getDouble("totalPrice", 0.0);
-            textViewTotalPrice.setText("Total Price: $" + totalPrice);
-        }
-
         // Handle payment button click
         buttonProceedToPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,13 +40,45 @@ public class PaymentFragment extends Fragment {
             }
         });
 
+        // Calculate and display total price
+        calculateTotalPrice();
+
         return view;
     }
 
-    private void proceedToPayment() {
-        // Get delivery distance
-        double deliveryDistance = Double.parseDouble(editTextDeliveryDistance.getText().toString());
+    @SuppressLint("SetTextI18n")
+    private void calculateTotalPrice() {
+        // Retrieve passed arguments
+        Bundle args = getArguments();
+        if (args != null) {
+            String productPriceStr = args.getString("productPrice", "0.00").replace("$", "");
+            double productPrice = Double.parseDouble(productPriceStr);
+            int quantity = args.getInt("quantity", 1);
 
+            // Get delivery distance
+            double deliveryDistance = 0.0;
+            if (!editTextDeliveryDistance.getText().toString().isEmpty()) {
+                deliveryDistance = Double.parseDouble(editTextDeliveryDistance.getText().toString());
+            }
+
+            // Calculate total price
+            double totalPrice = productPrice * quantity;
+
+            // Calculate additional cost based on distance
+            if (deliveryDistance <= 10) {
+                totalPrice += deliveryDistance; // $1 for each km up to 10 km
+            } else {
+                totalPrice += 10; // $1 for each km up to 10 km
+                double additionalDistance = deliveryDistance - 10;
+                totalPrice += Math.ceil(additionalDistance / 5) * 1; // $1 for every additional 5 km
+            }
+
+            textViewTotalPrice.setText("Total Price: $" + String.format("%.2f", totalPrice));
+        }
+    }
+
+
+    private void proceedToPayment() {
         // Get selected payment method
         int selectedPaymentMethodId = radioGroupPaymentMethod.getCheckedRadioButtonId();
         RadioButton radioButtonSelected = getView().findViewById(selectedPaymentMethodId);

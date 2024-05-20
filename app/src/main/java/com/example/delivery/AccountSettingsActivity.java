@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -70,30 +71,64 @@ public class AccountSettingsActivity extends FontBaseActivity {
             return;
         }
 
+        // Update password if it's not empty
         if (!TextUtils.isEmpty(password)) {
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if (currentUser != null) {
-                currentUser.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AccountSettingsActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(AccountSettingsActivity.this, "Failed to update password", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+            updatePassword(password);
         }
 
+        // Update profile information
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
+
+            // Store current user's data in a new table with timestamp
+            storePreviousUserData(userId);
+
+            // Update current user's profile in the original table
             mDatabaseRef.child(userId).child("username").setValue(username);
             mDatabaseRef.child(userId).child("city").setValue(city);
             Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Method to update the user's password
+    private void updatePassword(String newPassword) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            currentUser.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(AccountSettingsActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AccountSettingsActivity.this, "Failed to update password", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    // Method to store previous user data in a new table with timestamp
+    private void storePreviousUserData(String userId) {
+        // Get a reference to a new table for storing previous data
+        DatabaseReference previousDataRef = FirebaseDatabase.getInstance().getReference("previousUserData");
+
+        // Get current user's data from the original table
+        mDatabaseRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Store the data in the new table with a timestamp
+                    DataSnapshot userDataSnapshot = task.getResult();
+                    if (userDataSnapshot.exists()) {
+                        previousDataRef.child(userId).setValue(userDataSnapshot.getValue());
+                    }
+                } else {
+                    Toast.makeText(AccountSettingsActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
