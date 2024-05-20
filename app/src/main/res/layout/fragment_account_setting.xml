@@ -9,7 +9,9 @@
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username" />
+        android:hint="Username"
+        android:textSize="20dp"
+        />
 
     <EditText
         android:id="@+id/emailEditText"
@@ -17,25 +19,35 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:enabled="false" />
+        android:enabled="false"
+        android:textSize="20dp"
+        />
 
     <EditText
         android:id="@+id/cityEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="City" />
+        android:hint="City"
+        android:textSize="20dp"
+        />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="New Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textSize="20dp"
+        />
 
     <Button
         android:id="@+id/updateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update" />
+        android:text="Update"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="16dp"
+        android:textSize="16dp"
+        android:gravity="center"/>
 
 </LinearLayout>

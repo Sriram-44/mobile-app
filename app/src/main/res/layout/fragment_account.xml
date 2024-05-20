@@ -3,29 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:gravity="center_horizontal"> <!-- Center children horizontally -->
+
+    <!-- Centered TextView for displaying account details -->
+    <TextView
+        android:id="@+id/accountView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account Details"
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"/> <!-- Center text within TextView -->
 
     <!-- TextView for displaying the user's email -->
     <TextView
         android:id="@+id/emailTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Email:" />
+        android:text="Email:"
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp"/>
 
     <!-- TextView for displaying the user's username -->
     <TextView
-        android:id="@+id/usernameEditText"
+        android:id="@+id/usernameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Username:"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp"/>
 
     <!-- TextView for displaying the user's city -->
     <TextView
-        android:id="@+id/cityEditText"
+        android:id="@+id/cityTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="City:"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp"/>
 
 </LinearLayout>

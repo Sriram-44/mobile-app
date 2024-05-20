@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".SettingsFragment">
+    tools:context=".SettingsFragment"
+    android:layout_centerInParent="true">
 
     <Button
         android:id="@+id/buttonAccountSettings"
@@ -12,7 +13,9 @@
         android:layout_height="wrap_content"
         android:text="Account Settings"
         android:onClick="openAccountSettings"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_background"
+        />
 
     <Button
         android:id="@+id/buttonAppSettings"
@@ -20,7 +23,9 @@
         android:layout_height="wrap_content"
         android:text="App Settings"
         android:onClick="openAppSettings"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_background"
+        />
 
     <Button
         android:id="@+id/buttonAbout"
@@ -28,7 +33,9 @@
         android:layout_height="wrap_content"
         android:text="About"
         android:onClick="toggleAboutVisibility"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_background"
+        />
 
     <LinearLayout
         android:id="@+id/layoutAboutDetails"

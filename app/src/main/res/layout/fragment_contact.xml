@@ -8,10 +8,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Contact Information"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        />
 
     <TextView
         android:id="@+id/phoneNumberTextView"
@@ -23,7 +24,9 @@
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         android:autoLink="phone"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        android:textSize="20dp"
+        />
 
     <TextView
         android:id="@+id/emailTextView"
@@ -35,18 +38,22 @@
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         android:autoLink="email"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        android:textSize="20dp"
+        />
 
     <TextView
         android:id="@+id/websiteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="www.google.com"
+        android:text="Web: www.google.com"
         android:textColorLink="@color/linkColor"
         android:layout_below="@id/emailTextView"
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         android:autoLink="web"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        android:textSize="20dp"
+        />
 
 </RelativeLayout>

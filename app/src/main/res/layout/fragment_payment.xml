@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Total Price: $0.00"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <!-- Delivery Distance -->
@@ -33,19 +33,25 @@
             android:id="@+id/radioButtonUPI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="UPI" />
+            android:text="UPI"
+            android:textSize="20dp"
+            />
 
         <RadioButton
             android:id="@+id/radioButtonCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Card" />
+            android:text="Card"
+            android:textSize="20dp"
+            />
 
         <RadioButton
             android:id="@+id/radioButtonCashOnDelivery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cash on Delivery" />
+            android:text="Cash on Delivery"
+            android:textSize="20dp"
+            />
     </RadioGroup>
 
     <!-- Payment Button -->
@@ -53,6 +59,9 @@
         android:id="@+id/buttonProceedToPayment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Proceed to Payment" />
+        android:text="Proceed to Payment"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="16dp"
+        />
 
 </LinearLayout>
