@@ -3,57 +3,86 @@ package com.example.delivery;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends FontBaseActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private Button buttonProfile, buttonOrders, buttonContact, buttonSettings;
+    private Button settingButton;
+    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Find buttons
-        buttonProfile = findViewById(R.id.buttonProfile);
-        buttonOrders = findViewById(R.id.buttonOrders);
-        buttonContact = findViewById(R.id.buttonContact); // Corrected
-        buttonSettings = findViewById(R.id.buttonSettings);
+        // Find views
+        settingButton = findViewById(R.id.settingButton);
+        backButton = findViewById(R.id.backButton);
+        TextView textViewWelcomeMessage = findViewById(R.id.textViewWelcomeMessage);
+        Button buttonProfile = findViewById(R.id.buttonProfile);
+        Button buttonOrders = findViewById(R.id.buttonOrders);
+        Button buttonContact = findViewById(R.id.buttonContact);
+        Button buttonPayment = findViewById(R.id.buttonPayment);
 
-        // Set click listeners for buttons
-        buttonProfile.setOnClickListener(new View.OnClickListener() {
+        // Set click listener for setting button
+        settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new AccountFragment());
+                runFragmentTransaction(new PaymentFragment());
             }
         });
 
-        buttonOrders.setOnClickListener(new View.OnClickListener() {
+        // Set click listener for back button
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new OrderFragment());
+                onBackPressed();
+            }
+        });
+
+        // Set welcome message text
+        textViewWelcomeMessage.setText("Main Page");
+
+        // Set click listeners for profile, contact, and payment buttons
+        buttonProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runFragmentTransaction(new AccountFragment());
+            }
+        });
+
+        buttonPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runFragmentTransaction(new PaymentFragment());
             }
         });
 
         buttonContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new ContactFragment()); // Corrected
-            }
-        });
-
-        buttonSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new SettingsFragment());
+                runFragmentTransaction(new ContactFragment());
             }
         });
 
         // Load default fragment (e.g., OrdersFragment)
-        loadFragment(new OrderFragment());
+        runFragmentTransaction(new OrderFragment());
+    }
+
+    // Method to run fragment transaction
+    private void runFragmentTransaction(final Fragment fragment) {
+        Runnable fragmentTransactionRunnable = new Runnable() {
+            @Override
+            public void run() {
+                loadFragment(fragment);
+            }
+        };
+        fragmentTransactionRunnable.run();
     }
 
     // Method to load fragment into container
@@ -62,10 +91,5 @@ public class MainActivity extends FontBaseActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
-    }
-
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_main;
     }
 }

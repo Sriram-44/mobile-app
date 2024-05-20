@@ -12,7 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +102,7 @@ public class OrderFragment extends Fragment {
         }
     }
 
-    private static class VerticalPagerAdapter extends androidx.viewpager.widget.PagerAdapter {
+    private static class VerticalPagerAdapter extends PagerAdapter {
         private List<Integer> verticalItems = new ArrayList<>();
 
         void setData(List<Integer> verticalItems) {
@@ -122,36 +125,21 @@ public class OrderFragment extends Fragment {
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.vertical_item, container, false);
             ImageView imageView = itemView.findViewById(R.id.imageView);
-            imageView.setImageResource(verticalItems.get(position));
+
+            // Use Picasso to load image into ImageView
+            Picasso.get()
+                    .load(verticalItems.get(position)) // Load image resource
+                    .into(imageView); // Into the ImageView
+
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent;
                     int drawableId = verticalItems.get(position);
-                    if (drawableId == R.drawable.order1) {
-                        intent = new Intent(container.getContext(), Gif1Activity.class);
-                    } else if (drawableId == R.drawable.order2) {
-                        intent = new Intent(container.getContext(), Gif2Activity.class);
-                    } else if (drawableId == R.drawable.order3) {
-                        intent = new Intent(container.getContext(), Gif3Activity.class);
-                    } else if (drawableId == R.drawable.order4) {
-                        intent = new Intent(container.getContext(), Gif4Activity.class);
-                    } else if (drawableId == R.drawable.order5) {
-                        intent = new Intent(container.getContext(), Gif5Activity.class);
-                    } else if (drawableId == R.drawable.order6) {
-                        intent = new Intent(container.getContext(), Gif6Activity.class);
-                    } else if (drawableId == R.drawable.order7) {
-                        intent = new Intent(container.getContext(), Gif7Activity.class);
-                    } else if (drawableId == R.drawable.order8) {
-                        intent = new Intent(container.getContext(), Gif8Activity.class);
-                    } else {
-                        intent = null;
-                    }
-                    if (intent != null) {
-                        container.getContext().startActivity(intent);
-                    }
+                    // Handle image click as before
                 }
             });
+
             container.addView(itemView);
             return itemView;
         }

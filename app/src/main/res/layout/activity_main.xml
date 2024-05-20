@@ -7,16 +7,42 @@
     android:background="@color/black"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textViewWelcomeMessage"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Main Page"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        tools:ignore="HardcodedText" />
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/settingButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/setting_icon"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
+
+       <!-- Main Page text -->
+        <TextView
+            android:id="@+id/textViewWelcomeMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Main Page"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            tools:ignore="HardcodedText" />
+
+        <!-- Setting icon button -->
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"/>
+
+    </RelativeLayout>
 
     <!-- activity_main.xml -->
     <FrameLayout
@@ -50,6 +76,15 @@
             android:layout_marginEnd="4dp"
             tools:ignore="HardcodedText"/>
 
+
+        <Button
+            android:id="@+id/buttonPayment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Payment"
+            android:layout_marginEnd="0dp"
+            tools:ignore="HardcodedText"/>
         <Button
             android:id="@+id/buttonContact"
             android:layout_width="0dp"
@@ -57,15 +92,6 @@
             android:layout_height="wrap_content"
             android:text="Contact"
             android:layout_marginEnd="4dp"
-            tools:ignore="HardcodedText"/>
-
-        <Button
-            android:id="@+id/buttonSettings"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Settings"
-            android:layout_marginEnd="0dp"
             tools:ignore="HardcodedText"/>
 
     </LinearLayout>

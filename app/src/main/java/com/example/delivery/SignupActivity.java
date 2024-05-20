@@ -24,10 +24,8 @@ public class SignupActivity extends FontBaseActivity {
     private EditText editTextUserName, editTextEmailOrPhone, editTextCity, editTextPassword, editTextConfirmPassword;
     private Button buttonSignUp;
     private FirebaseAuth mAuth;
-<<<<<<< HEAD
-=======
+
     private FirebaseFirestore db;
->>>>>>> 5af369c14c88ebd86c684abfa4fcf942762066a6
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
