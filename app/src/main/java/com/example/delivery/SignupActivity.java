@@ -1,115 +1,279 @@
+
 package com.example.delivery;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
-import android.widget.Button;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignupActivity extends FontBaseActivity {
+public class SignupActivity extends AppCompatActivity {
 
-    private EditText editTextUserName, editTextEmailOrPhone, editTextCity, editTextPassword, editTextConfirmPassword;
-    private Button buttonSignUp;
+    private static final String TAG = "SignupActivity";
+
+    private EditText editTextName, editTextEmail, editTextPassword, editTextConfirmPassword;
     private FirebaseAuth mAuth;
-
     private FirebaseFirestore db;
+    private LottieAnimationView loadingAnimation;
+    private MaterialButtonToggleGroup toggleGroup;
+    private  Toast toast = null;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
 
-        // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize views
-        editTextUserName = findViewById(R.id.editTextUserName);
-        editTextEmailOrPhone = findViewById(R.id.editTextEmailOrPhone);
-        editTextCity = findViewById(R.id.editTextCity);
-        editTextPassword = findViewById(R.id.editTextPassword);
-        editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
-        buttonSignUp = findViewById(R.id.buttonSignUp);
+        editTextName = findViewById(R.id.userName);
+        editTextEmail = findViewById(R.id.email);
+        editTextPassword = findViewById(R.id.password);
+        editTextConfirmPassword = findViewById(R.id.confirmPassword);
+        toggleGroup = findViewById(R.id.loginToggleGroup);
+        MaterialButton SignupButton = findViewById(R.id.signUpButton);
+        MaterialButton loginButton = findViewById(R.id.loginButton);
 
-        // Set OnClickListener for SignUp button
-        buttonSignUp.setOnClickListener(view -> signUp());
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
+        SignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendVerificationEmail();
+            }
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
-    private void signUp() {
-        String userName = editTextUserName.getText().toString().trim();
-        String emailOrPhone = editTextEmailOrPhone.getText().toString().trim();
-        String city = editTextCity.getText().toString().trim();
+    private void sendVerificationEmail() {
+        String name = editTextName.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
+        String passwordConf = editTextConfirmPassword.getText().toString().trim();
 
-        // Perform validation
-        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(emailOrPhone) || TextUtils.isEmpty(city)
-                || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        if (toast != null)
+            toast.cancel();
+
+        if (TextUtils.isEmpty(name)) {
+            toast = Toast.makeText(SignupActivity.this, "Name cannot be empty",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+            editTextName.setError("Name is required");
+            editTextName.requestFocus();
             return;
         }
 
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            toast = Toast.makeText(SignupActivity.this, "Email cannot be empty",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+            editTextEmail.setError("Email is required");
+            editTextEmail.requestFocus();
             return;
         }
 
-        // Perform sign up with email
-        mAuth.createUserWithEmailAndPassword(emailOrPhone, password)
+        if (TextUtils.isEmpty(password)) {
+            toast = Toast.makeText(SignupActivity.this, "Password cannot be empty",
+                    Toast.LENGTH_SHORT);
+            editTextPassword.setError("Password is required");
+            editTextPassword.requestFocus();
+            toast.show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(passwordConf)) {
+            toast = Toast.makeText(SignupActivity.this, "Password cannot be empty",
+                    Toast.LENGTH_SHORT);
+            editTextConfirmPassword.setError("Password is required");
+            editTextConfirmPassword.requestFocus();
+            toast.show();
+            return;
+        }
+
+        if (!password.equals(passwordConf)) {
+            toast = Toast.makeText(SignupActivity.this, "Password dont match",
+                    Toast.LENGTH_SHORT);
+            editTextPassword.setError("Passwords dont match");
+            editTextConfirmPassword.setError("Passwords dont match");
+            editTextPassword.requestFocus();
+            editTextConfirmPassword.requestFocus();
+            toast.show();
+            return;
+        }
+
+        toggleGroup.setVisibility(View.GONE);
+        loadingAnimation.setVisibility(View.VISIBLE);
+
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign up success, update UI with the signed-in user's information
-                            Toast.makeText(SignupActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
-
-                            // Get the user's unique ID (UID)
-                            String userId = mAuth.getCurrentUser().getUid();
-
-                            // Reference to the location in the Firestore where you want to store the user's information
-                            DocumentReference userRef = db.collection("users").document(userId);
-
-                            // Create a User object or simply a Map with the user's information
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("username", userName);
-                            user.put("emailOrPhone", emailOrPhone);
-                            user.put("city", city);
-
-                            // Write the user's information to Firestore
-                            userRef.set(user)
-                                    .addOnSuccessListener(aVoid -> {
-                                        // User information saved successfully
-                                        // Optionally, navigate to another activity or perform additional actions
-                                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        // Error occurred while saving user information
-                                        Toast.makeText(SignupActivity.this, "Failed to save user information: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            mAuth.getCurrentUser().sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> verificationTask) {
+                                            if (verificationTask.isSuccessful()) {
+                                                if (toast != null)
+                                                    toast.cancel();
+                                                toast = Toast.makeText(SignupActivity.this, "Verification email sent", Toast.LENGTH_SHORT);
+                                                toast.show();
+                                                toggleGroup.setVisibility(View.GONE);
+                                                loadingAnimation.setVisibility(View.VISIBLE);
+                                                checkEmailVerificationStatus();
+                                            } else {
+                                                if (toast != null)
+                                                    toast.cancel();
+                                                toast = Toast.makeText(SignupActivity.this, "Failed to send verification email", Toast.LENGTH_SHORT);
+                                                toast.show();
+                                                toggleGroup.setVisibility(View.VISIBLE);
+                                                loadingAnimation.setVisibility(View.GONE);
+                                            }
+                                        }
                                     });
                         } else {
-                            // If sign up fails, display a message to the user.
-                            Toast.makeText(SignupActivity.this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            if (toast != null)
+                                toast.cancel();
+                            toast = Toast.makeText(SignupActivity.this, "Failed to create account. Please try again", Toast.LENGTH_SHORT);
+                            toast.show();
+                            toggleGroup.setVisibility(View.VISIBLE);
+                            loadingAnimation.setVisibility(View.GONE);
                         }
                     }
                 });
     }
 
+    private void checkEmailVerificationStatus() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    user.reload();
+                    if (user.isEmailVerified()) {
+                        addUserToFirestore(editTextName.getText().toString().trim(), editTextEmail.getText().toString().trim());
+                    } else {
+                        checkEmailVerificationStatus();
+                    }
+                }
+            }
+        }, 2000);
+    }
+
+    public void addUserToFirestore(String name, String email) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("name", name);
+        user.put("email", email);
+
+        db.collection("users")
+                .document(mAuth.getCurrentUser().getUid())
+                .set(user)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (toast != null)
+                                toast.cancel();
+                            toast = Toast.makeText(SignupActivity.this, "Sign up successful", Toast.LENGTH_SHORT);
+                            toast.show();
+                            Log.d(TAG, "User details added to Firestore");
+                            Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+                            startActivity(i);
+                            finish();
+                        } else {
+                            if (toast != null)
+                                toast.cancel();
+                            Log.w(TAG, "Error adding user details to Firestore", task.getException());
+                            toast = Toast.makeText(SignupActivity.this, "Error adding user details to Firestore", Toast.LENGTH_SHORT);
+                            toast.show();
+                            toggleGroup.setVisibility(View.VISIBLE);
+                            loadingAnimation.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+        db.collection("userSongs")
+                .document(mAuth.getCurrentUser().getUid())
+                .set(user);
+
+        db.collection("userAlbums")
+                .document(mAuth.getCurrentUser().getUid())
+                .set(user);
+
+        db.collection("userArtists")
+                .document(mAuth.getCurrentUser().getUid())
+                .set(user);
+
+        db.collection("userPlaylists")
+                .document(mAuth.getCurrentUser().getUid())
+                .set(user);
+    }
+
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_signup;
+    public void onBackPressed() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null && !user.isEmailVerified()) {
+            user.delete()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                toggleGroup.setVisibility(View.VISIBLE);
+                                loadingAnimation.setVisibility(View.GONE);
+                                if (toast != null)
+                                    toast.cancel();
+                                Log.d(TAG, "User deleted");
+                                toast = Toast.makeText(SignupActivity.this, "Sign up canceled", Toast.LENGTH_SHORT);
+                                toast.show();
+                            } else {
+                                if (toast != null)
+                                    toast.cancel();
+                                Log.w(TAG, "Error deleting user", task.getException());
+                                toast = Toast.makeText(SignupActivity.this, "Clean up error", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                    });
+        } else {
+            super.onBackPressed();
+        }
     }
 }

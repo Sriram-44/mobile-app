@@ -64,6 +64,8 @@ public class PaymentActivity extends AppCompatActivity {
                     }
                 });
 
+        session.setDebug(true);
+
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("from@example.com"));

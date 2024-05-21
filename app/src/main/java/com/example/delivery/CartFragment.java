@@ -1,6 +1,7 @@
 package com.example.delivery;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,23 @@ public class CartFragment extends Fragment {
     private void showProductDetails(String selectedItem) {
         if (selectedItem == null) return;
 
+        new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                // Parse and show product details asynchronously
+                return parseProductDetails(selectedItem);
+            }
+
+            @Override
+            protected void onPostExecute(String productDetails) {
+                super.onPostExecute(productDetails);
+                productDetailsTextView.setText(productDetails);
+            }
+        }.execute();
+    }
+
+    private String parseProductDetails(String selectedItem) {
+        // Parsing logic for product details
         String[] parts = selectedItem.split(" - ");
         if (parts.length >= 2) {
             String productName = parts[0];
@@ -62,9 +80,10 @@ public class CartFragment extends Fragment {
                 double price = Double.parseDouble(priceParts[1].substring(1));
                 int quantity = Integer.parseInt(priceParts[2].substring(1));
                 double totalPrice = price * quantity;
-                productDetailsTextView.setText("Product: " + productName + "\nPrice: " + priceParts[1] + "\nQuantity: " + quantity + "\nTotal Price: $" + totalPrice);
+                return "Product: " + productName + "\nPrice: " + priceParts[1] + "\nQuantity: " + quantity + "\nTotal Price: $" + totalPrice;
             }
         }
+        return "";
     }
 
     private void updateCartItems(List<String> items) {

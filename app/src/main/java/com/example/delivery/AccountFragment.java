@@ -1,6 +1,7 @@
 package com.example.delivery;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,26 +60,60 @@ public class AccountFragment extends Fragment {
             userEmailTextView.setText(userEmail);
 
             // Retrieve and display user's additional information (username and city)
-            mDatabaseRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            new LoadUserInfoTask().execute(currentUser.getUid());
+        } else {
+            // No user is signed in, redirect to login activity or handle as appropriate
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class LoadUserInfoTask extends AsyncTask<String, Void, User> {
+
+        @Override
+        protected User doInBackground(String... uids) {
+            final User[] user = {null};
+            mDatabaseRef.child(uids[0]).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         String userName = dataSnapshot.child("username").getValue(String.class);
                         String userCity = dataSnapshot.child("city").getValue(String.class);
-
-                        // Update UI with user's additional information
-                        userNameTextView.setText(userName);
-                        userCityTextView.setText(userCity);
+                        user[0] = new User(userName, userCity);
                     }
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                     // Handle database error
                 }
             });
-        } else {
-            // No user is signed in, redirect to login activity or handle as appropriate
+            return user[0];
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            if (user != null) {
+                userNameTextView.setText(user.getUserName());
+                userCityTextView.setText(user.getUserCity());
+            }
+        }
+    }
+
+    private static class User {
+        private final String userName;
+        private final String userCity;
+
+        public User(String userName, String userCity) {
+            this.userName = userName;
+            this.userCity = userCity;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public String getUserCity() {
+            return userCity;
         }
     }
 }

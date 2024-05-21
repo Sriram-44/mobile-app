@@ -1,6 +1,7 @@
 package com.example.delivery;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -52,24 +53,18 @@ public class Gif1Activity extends AppCompatActivity {
         imageView1.setOnClickListener(v -> showProductDetails("Apple", "$10.00"));
         imageView2.setOnClickListener(v -> showProductDetails("Tea", "$15.00"));
 
-        // Assume you have a method to get the current username
-        String username = getUsername();
-
         addToCartButton.setOnClickListener(view -> {
             int selectedQuantity = Integer.parseInt(quantitySpinner.getSelectedItem().toString());
             String productName = productNameTextView.getText().toString();
             String productPrice = productPriceTextView.getText().toString();
 
-            // Generate a unique item ID (you can use UUID or Firebase's push key)
-            String itemId = FirebaseDatabase.getInstance().getReference().child("Users").child(username).child("Cart").push().getKey();
+            // Assume you have a method to get the current username
+            String username = getUsername();
 
-            // Create the cartItem with username
-            cartItem cartItem = new cartItem(itemId, productName, productPrice, selectedQuantity, username);
-
-            // Save to Firebase under the user's cart
-            DatabaseReference cartItemRef = FirebaseDatabase.getInstance().getReference().child("Users").child(username).child("Cart").child(itemId);
-            cartItemRef.setValue(cartItem);
+            // Execute database operation in a background thread using AsyncTask
+            new SaveCartItemTask().execute(username, productName, productPrice, String.valueOf(selectedQuantity));
         });
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,5 +83,37 @@ public class Gif1Activity extends AppCompatActivity {
     private String getUsername() {
         // Replace this with actual logic to get the logged-in user's username
         return "exampleUsername";
+    }
+
+    private class SaveCartItemTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            String username = params[0];
+            String productName = params[1];
+            String productPrice = params[2];
+            int selectedQuantity = Integer.parseInt(params[3]);
+
+            saveCartItemToFirebase(username, productName, productPrice, selectedQuantity);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            // Show any UI updates or notifications after the task completes if needed
+        }
+    }
+
+    private void saveCartItemToFirebase(String username, String productName, String productPrice, int selectedQuantity) {
+        // Generate a unique item ID (you can use UUID or Firebase's push key)
+        String itemId = FirebaseDatabase.getInstance().getReference().child("Users").child(username).child("Cart").push().getKey();
+
+        // Create the cartItem with username
+        cartItem cartItem = new cartItem(itemId, productName, productPrice, selectedQuantity, username);
+
+        // Save to Firebase under the user's cart
+        DatabaseReference cartItemRef = FirebaseDatabase.getInstance().getReference().child("Users").child(username).child("Cart").child(itemId);
+        cartItemRef.setValue(cartItem);
     }
 }
