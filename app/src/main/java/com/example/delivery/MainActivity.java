@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Button buttonProfile = findViewById(R.id.buttonProfile);
         Button buttonOrders = findViewById(R.id.buttonOrders);
         Button buttonContact = findViewById(R.id.buttonContact);
-        Button buttonPayment = findViewById(R.id.buttonPayment);
+        Button buttonCart = findViewById(R.id.buttonCart);
 
         // Set click listener for setting button
         settingButton.setOnClickListener(new View.OnClickListener() {
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonPayment.setOnClickListener(new View.OnClickListener() {
+        buttonCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runFragmentTransaction(new PaymentFragment());
+                runFragmentTransaction(new CartFragment());
             }
         });
 

@@ -1,5 +1,6 @@
 package com.example.delivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -8,14 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
+import androidx.lifecycle.ViewModelProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,30 +22,15 @@ public class Gif1Activity extends AppCompatActivity {
     private Spinner quantitySpinner;
     private Button addToCartButton;
     private Button backButton;
-
-    private DatabaseReference databaseReference;
+    private CartViewModel cartViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_gif1);
 
-        setupWindowInsets();
-        initializeFirebase();
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         setupActivity();
-    }
-
-    private void setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
-
-    private void initializeFirebase() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("cartItems");
     }
 
     private void setupActivity() {
@@ -61,7 +41,6 @@ public class Gif1Activity extends AppCompatActivity {
         addToCartButton = findViewById(R.id.addToCartButton);
         backButton = findViewById(R.id.backButton);
 
-        // Set up the Spinner with quantity options
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.quantity_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -73,16 +52,30 @@ public class Gif1Activity extends AppCompatActivity {
         imageView1.setOnClickListener(v -> showProductDetails("Apple", "$10.00"));
         imageView2.setOnClickListener(v -> showProductDetails("Tea", "$15.00"));
 
+        // Assume you have a method to get the current username
+        String username = getUsername();
+
         addToCartButton.setOnClickListener(view -> {
             int selectedQuantity = Integer.parseInt(quantitySpinner.getSelectedItem().toString());
             String productName = productNameTextView.getText().toString();
             String productPrice = productPriceTextView.getText().toString();
-            addToCart(productName, productPrice, selectedQuantity);
-            // Pass details to PaymentFragment
-            openPaymentFragment(productName, productPrice, selectedQuantity);
-        });
 
-        backButton.setOnClickListener(v -> onBackPressed());
+            // Generate a unique item ID (you can use UUID or Firebase's push key)
+            String itemId = FirebaseDatabase.getInstance().getReference().child("Users").child(username).child("Cart").push().getKey();
+
+            // Create the cartItem with username
+            cartItem cartItem = new cartItem(itemId, productName, productPrice, selectedQuantity, username);
+
+            // Save to Firebase under the user's cart
+            DatabaseReference cartItemRef = FirebaseDatabase.getInstance().getReference().child("Users").child(username).child("Cart").child(itemId);
+            cartItemRef.setValue(cartItem);
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Gif1Activity.this, MainActivity.class));
+            }
+        });
     }
 
     private void showProductDetails(String productName, String price) {
@@ -91,45 +84,9 @@ public class Gif1Activity extends AppCompatActivity {
         detailsLayout.setVisibility(View.VISIBLE);
     }
 
-    private void addToCart(String productName, String price, int quantity) {
-        String id = databaseReference.push().getKey();
-        CartItem cartItem = new CartItem(id, productName, price, quantity);
-        databaseReference.child(id).setValue(cartItem)
-                .addOnSuccessListener(aVoid -> Toast.makeText(Gif1Activity.this, "Added to cart", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(Gif1Activity.this, "Failed to add to cart", Toast.LENGTH_SHORT).show());
-    }
-
-    private void openPaymentFragment(String productName, String productPrice, int quantity) {
-        // Create a new instance of PaymentFragment and pass details as arguments
-        PaymentFragment paymentFragment = new PaymentFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("productName", productName);
-        bundle.putString("productPrice", productPrice);
-        bundle.putInt("quantity", quantity);
-        paymentFragment.setArguments(bundle);
-
-        // Navigate to PaymentFragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, paymentFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    public static class CartItem {
-        public String id;
-        public String productName;
-        public String price;
-        public int quantity;
-
-        public CartItem() {
-            // Default constructor required for calls to DataSnapshot.getValue(CartItem.class)
-        }
-
-        public CartItem(String id, String productName, String price, int quantity) {
-            this.id = id;
-            this.productName = productName;
-            this.price = price;
-            this.quantity = quantity;
-        }
+    // Mock method to get the current username
+    private String getUsername() {
+        // Replace this with actual logic to get the logged-in user's username
+        return "exampleUsername";
     }
 }

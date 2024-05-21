@@ -84,11 +84,11 @@
 
 
         <Button
-            android:id="@+id/buttonPayment"
+            android:id="@+id/buttonCart"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Payment"
+            android:text="Cart"
             android:layout_marginEnd="0dp"
             tools:ignore="HardcodedText"
             android:background="@drawable/button_background"
