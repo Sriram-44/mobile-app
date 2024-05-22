@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,7 +16,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Delivery"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:enableOnBackInvokedCallback="true"
+        >
+        <activity
+            android:name=".User"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".EmailSender"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".PaymentActivity"
             android:exported="false" />

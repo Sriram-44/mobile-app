@@ -7,11 +7,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.delivery.EmailSender;
 import com.google.android.material.button.MaterialButton;
+
+import javax.mail.MessagingException;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -63,7 +65,14 @@ public class PaymentActivity extends AppCompatActivity {
 
                 // Handle payment success or failure
                 Toast.makeText(PaymentActivity.this, "Payment successful", Toast.LENGTH_SHORT).show();
-                // On success, navigate to another activity or perform other actions
+
+                // Send email notification
+                try {
+                    EmailSender.sendEmail("recipient@example.com", "Order Registered", "Your order has been successfully registered.");
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PaymentActivity.this, "Failed to send email notification", Toast.LENGTH_SHORT).show();
+                }
             }
         }, 3000);
     }

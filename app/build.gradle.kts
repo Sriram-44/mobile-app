@@ -32,9 +32,8 @@ android {
 
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
-   implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore:24.0.2")
-    implementation("com.google.android.material:material:1.13.0-alpha01")
+    implementation("com.google.firebase:firebase-auth") // Uncomment if needed
+    implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database:20.0.0")
     implementation("com.airbnb.android:lottie:4.2.0")
@@ -44,8 +43,6 @@ dependencies {
     implementation("androidx.viewpager:viewpager:1.0.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("com.google.android.material:material:1.3.0")
-    implementation("com.airbnb.android:lottie:3.7.0")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.fragment:fragment:1.3.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
@@ -62,4 +59,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }
