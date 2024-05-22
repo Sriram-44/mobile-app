@@ -1,84 +1,70 @@
 package com.example.delivery;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javax.mail.*;
-import javax.mail.internet.*;
+import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.button.MaterialButton;
 
 public class PaymentActivity extends AppCompatActivity {
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private EditText etCardNumber, etExpiryDate, etCVV;
+    private MaterialButton btnPay;
+    private LottieAnimationView loadingAnimation;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        Button payButton = findViewById(R.id.payButton);
-        payButton.setOnClickListener(new View.OnClickListener() {
+        etCardNumber = findViewById(R.id.etCardNumber);
+        etExpiryDate = findViewById(R.id.etExpiryDate);
+        etCVV = findViewById(R.id.etCVV);
+        btnPay = findViewById(R.id.btnPay);
+        loadingAnimation = findViewById(R.id.loadingAnimation);
+
+        btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pay();
+                handlePayment();
             }
         });
     }
 
-    public void pay() {
-        // Your existing payment logic
+    private void handlePayment() {
+        String cardNumber = etCardNumber.getText().toString().trim();
+        String expiryDate = etExpiryDate.getText().toString().trim();
+        String cvv = etCVV.getText().toString().trim();
 
-        // Move the email sending to a background thread
-        sendConfirmationEmailInExecutor();
-    }
+        if (cardNumber.isEmpty() || expiryDate.isEmpty() || cvv.isEmpty()) {
+            Toast.makeText(PaymentActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-    private void sendConfirmationEmailInExecutor() {
-        executorService.execute(new Runnable() {
+        loadingAnimation.setVisibility(View.VISIBLE);
+        loadingAnimation.playAnimation();
+        btnPay.setEnabled(false);
+
+        // Simulate payment processing
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                sendConfirmationEmail();
+                loadingAnimation.setVisibility(View.GONE);
+                loadingAnimation.cancelAnimation();
+                btnPay.setEnabled(true);
+
+                // Handle payment success or failure
+                Toast.makeText(PaymentActivity.this, "Payment successful", Toast.LENGTH_SHORT).show();
+                // On success, navigate to another activity or perform other actions
             }
-        });
-    }
-
-    private void sendConfirmationEmail() {
-        String host = "smtp.example.com";
-        final String username = "your_email@example.com";
-        final String password = "your_password";
-        String to = "customer@example.com";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
-
-        session.setDebug(true);
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("from@example.com"));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(to));
-            message.setSubject("Order Confirmation");
-            message.setText("Dear Customer,\n\n Your order has been placed successfully!");
-
-            Transport.send(message);
-            System.out.println("Email sent successfully!");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        }, 3000);
     }
 }

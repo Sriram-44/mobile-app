@@ -4,8 +4,7 @@
     package="com.example.delivery">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,19 +21,12 @@
             android:exported="false" />
         <activity
             android:name=".CartViewModel"
-            android:exported="false" />
-        <activity
-            android:name=".cartItem"
-            android:exported="false" />
-        <activity
-            android:name=".CartViewModelFactory"
-            android:exported="false" />
-        <activity
-            android:name=".CartViewActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".CartFragment"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".Gif8Activity"
             android:exported="false" />

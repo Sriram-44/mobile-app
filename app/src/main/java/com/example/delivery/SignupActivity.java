@@ -1,4 +1,3 @@
-
 package com.example.delivery;
 
 import android.annotation.SuppressLint;
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,7 +25,9 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,10 +37,10 @@ public class SignupActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextEmail, editTextPassword, editTextConfirmPassword;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    private DatabaseReference dbRef;
     private LottieAnimationView loadingAnimation;
     private MaterialButtonToggleGroup toggleGroup;
-    private  Toast toast = null;
+    private Toast toast = null;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,7 +50,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        dbRef = FirebaseDatabase.getInstance().getReference();
 
         editTextName = findViewById(R.id.userName);
         editTextEmail = findViewById(R.id.email);
@@ -128,10 +128,10 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         if (!password.equals(passwordConf)) {
-            toast = Toast.makeText(SignupActivity.this, "Password dont match",
+            toast = Toast.makeText(SignupActivity.this, "Password don't match",
                     Toast.LENGTH_SHORT);
-            editTextPassword.setError("Passwords dont match");
-            editTextConfirmPassword.setError("Passwords dont match");
+            editTextPassword.setError("Passwords don't match");
+            editTextConfirmPassword.setError("Passwords don't match");
             editTextPassword.requestFocus();
             editTextConfirmPassword.requestFocus();
             toast.show();
@@ -189,7 +189,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (user != null) {
                     user.reload();
                     if (user.isEmailVerified()) {
-                        addUserToFirestore(editTextName.getText().toString().trim(), editTextEmail.getText().toString().trim());
+                        addUserToRealtimeDatabase(editTextName.getText().toString().trim(), editTextEmail.getText().toString().trim());
                     } else {
                         checkEmailVerificationStatus();
                     }
@@ -198,14 +198,13 @@ public class SignupActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    public void addUserToFirestore(String name, String email) {
+    public void addUserToRealtimeDatabase(String name, String email) {
+        String userId = mAuth.getCurrentUser().getUid();
         Map<String, Object> user = new HashMap<>();
         user.put("name", name);
         user.put("email", email);
 
-        db.collection("users")
-                .document(mAuth.getCurrentUser().getUid())
-                .set(user)
+        dbRef.child("users").child(userId).setValue(user)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -214,15 +213,15 @@ public class SignupActivity extends AppCompatActivity {
                                 toast.cancel();
                             toast = Toast.makeText(SignupActivity.this, "Sign up successful", Toast.LENGTH_SHORT);
                             toast.show();
-                            Log.d(TAG, "User details added to Firestore");
+                            Log.d(TAG, "User details added to Realtime Database");
                             Intent i = new Intent(SignupActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
                         } else {
                             if (toast != null)
                                 toast.cancel();
-                            Log.w(TAG, "Error adding user details to Firestore", task.getException());
-                            toast = Toast.makeText(SignupActivity.this, "Error adding user details to Firestore", Toast.LENGTH_SHORT);
+                            Log.w(TAG, "Error adding user details to Realtime Database", task.getException());
+                            toast = Toast.makeText(SignupActivity.this, "Error adding user details to Realtime Database", Toast.LENGTH_SHORT);
                             toast.show();
                             toggleGroup.setVisibility(View.VISIBLE);
                             loadingAnimation.setVisibility(View.GONE);
@@ -230,21 +229,10 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 });
 
-        db.collection("userSongs")
-                .document(mAuth.getCurrentUser().getUid())
-                .set(user);
-
-        db.collection("userAlbums")
-                .document(mAuth.getCurrentUser().getUid())
-                .set(user);
-
-        db.collection("userArtists")
-                .document(mAuth.getCurrentUser().getUid())
-                .set(user);
-
-        db.collection("userPlaylists")
-                .document(mAuth.getCurrentUser().getUid())
-                .set(user);
+        dbRef.child("userSongs").child(userId).setValue(user);
+        dbRef.child("userAlbums").child(userId).setValue(user);
+        dbRef.child("userArtists").child(userId).setValue(user);
+        dbRef.child("userPlaylists").child(userId).setValue(user);
     }
 
     @Override

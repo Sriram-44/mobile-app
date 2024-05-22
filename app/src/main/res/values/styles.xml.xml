@@ -9,12 +9,6 @@
         <item name="android:textColor">@color/textColorLight</item>
     </style>
 
-    <!-- Custom theme for SplashActivity -->
-    <style name="Theme.Delivery" parent="Theme.AppCompat">
-        <!-- Customize your theme attributes here -->
-    </style>
-
-    <!-- Light Theme specific attributes -->
     <style name="LightTheme" parent="AppTheme">
         <item name="android:windowBackground">@color/backgroundLight</item>
         <item name="android:textColor">@color/textColorLight</item>
