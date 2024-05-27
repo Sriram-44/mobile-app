@@ -50,6 +50,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("com.sun.mail:android-mail:1.6.4")
     implementation("com.sun.mail:android-activation:1.6.4")
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

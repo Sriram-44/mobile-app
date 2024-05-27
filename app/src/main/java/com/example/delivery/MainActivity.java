@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Find views
-        settingButton = findViewById(R.id.settingButton);
+        ImageButton settingButton = findViewById(R.id.settingButton);
         backButton = findViewById(R.id.backButton);
         TextView textViewWelcomeMessage = findViewById(R.id.textViewWelcomeMessage);
         Button buttonProfile = findViewById(R.id.buttonProfile);

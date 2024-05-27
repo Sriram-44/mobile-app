@@ -6,6 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Gif8Activity">
+    tools:context=".Gif8Activity"
+    android:background="@color/background_color"
+    >
 
   </androidx.constraintlayout.widget.ConstraintLayout>

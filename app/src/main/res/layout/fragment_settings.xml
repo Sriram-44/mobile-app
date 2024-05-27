@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".SettingsFragment"
-    android:layout_centerInParent="true">
+    android:layout_centerInParent="true"
+    android:background="@color/background_color">
 
     <Button
         android:id="@+id/buttonAccountSettings"
@@ -15,7 +16,7 @@
         android:onClick="openAccountSettings"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_background"
-        />
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/buttonAppSettings"
@@ -25,7 +26,7 @@
         android:onClick="openAppSettings"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_background"
-        />
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/buttonAbout"
@@ -35,7 +36,7 @@
         android:onClick="toggleAboutVisibility"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_background"
-        />
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:id="@+id/layoutAboutDetails"
@@ -51,7 +52,8 @@
             android:text="About:"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/textAboutContent"
@@ -59,7 +61,8 @@
             android:layout_height="wrap_content"
             android:text="Your app details go here..."
             android:textSize="16sp"
-            android:lineSpacingExtra="4dp" />
+            android:lineSpacingExtra="4dp"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 

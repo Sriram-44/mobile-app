@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <TextView
         android:id="@+id/contactInfoTextView"
@@ -12,6 +13,7 @@
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         tools:ignore="HardcodedText"
+        android:textColor="@color/white"
         />
 
     <TextView
@@ -26,6 +28,7 @@
         android:autoLink="phone"
         tools:ignore="HardcodedText"
         android:textSize="20dp"
+        android:textColor="@color/white"
         />
 
     <TextView
@@ -40,6 +43,7 @@
         android:autoLink="email"
         tools:ignore="HardcodedText"
         android:textSize="20dp"
+        android:textColor="@color/white"
         />
 
     <TextView
@@ -54,6 +58,7 @@
         android:autoLink="web"
         tools:ignore="HardcodedText"
         android:textSize="20dp"
+        android:textColor="@color/white"
         />
 
 </RelativeLayout>
